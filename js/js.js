@@ -73,6 +73,7 @@ $(function() {
 	});
 	$(".oca_proxy_restart").click(function(e) {
 		e.preventDefault();
+		$(this).attr('disabled', 'disabled');
 		OCA.Connect.Settings.startProcess();
 	});
 
