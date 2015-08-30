@@ -9,6 +9,9 @@
 	<shipped>true</shipped>
 	<!-- FIXME -->
 	<default_enable/>
+	<types>
+		<filesystem/>
+	</types>
 	<dependencies>
 		<owncloud min-version="8.1" />
 		<owncloud max-version="8.2" />
