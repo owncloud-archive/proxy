@@ -1,0 +1,25 @@
+.oca-proxy-error {
+	background: #ce3702;
+	border-radius: 50%;
+}
+
+.oca-proxy-success {
+	background: #37ce02;
+	border-radius: 50%;
+}
+
+.oca-connect-connection-state {
+	display: inline;
+}
+
+.oca-proxy-box {
+	min-width: 250px;
+	display: inline-block;
+	vertical-align: top;
+}
+.oca_proxy_inlineblock_title {
+	display: inline-block;
+	height: 16px;
+	width: 16px;
+	vertical-align: text-bottom;
+}

@@ -1,0 +1,5 @@
+{
+    "require": {
+        "zendframework/zend-xmlrpc": "~2.5"
+    }
+}
