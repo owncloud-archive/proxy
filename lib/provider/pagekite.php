@@ -43,10 +43,11 @@ class PageKite extends Provider {
 		$this->xmlRpcClient = new \Zend\XmlRpc\Client($this->rpcUrl);
 		$client = new \Zend\Http\Client();
 		$client->setAdapter('Zend\Http\Client\Adapter\Proxy');
-		/*$client->setOptions([
-			'proxy_host' => $config->getSystemValue(),
-			'proxy_port' => 8080,
-		]);*/
+		$client->setOptions([
+			'sslcafile' => \OC::$SERVERROOT . '/config/ca-bundle.crt',
+			//'proxy_host' => $config->getSystemValue(),
+			//'proxy_port' => 8080,
+		]);
 		$this->xmlRpcClient->setHttpClient($client);
 	}
 
