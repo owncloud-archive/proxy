@@ -72,6 +72,10 @@ $(function() {
 		OCA.Connect.Settings.stopProcess();
 	});
 	$(".oca_proxy_restart").click(function(e) {
+		$("#oca-connect-check-connection").css('display', 'inline');
+		$("#oca-proxy-connection-working").css('display', 'none');
+		$("#oca-proxy-no-connection").css('display', 'none');
+
 		e.preventDefault();
 		$(this).attr('disabled', 'disabled');
 		OCA.Connect.Settings.startProcess();
@@ -98,7 +102,7 @@ $(function() {
 	}).success(function(response) {
 		$("#oca-connect-check-connection").css('display', 'none');
 		$("#oca-proxy-connection-working").css('display', 'inline');
-		$("#oca-proxy-domain-address-replacement").text(response);
+		$("#oca-proxy-domain-address-replacement").html("<a href=\""+response+"\">"+response+"</a>");
 	}).fail(function(response) {
 		$("#oca-connect-check-connection").css('display', 'none');
 		$("#oca-proxy-no-connection").css('display', 'inline');
