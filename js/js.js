@@ -11,7 +11,7 @@
 			}).success(function(response) {
 				location.reload();
 			}).fail(function(response) {
-				OC.Notification.showTemporary(response.responseText);
+				OC.Notification.showTemporary('Service has been stopped.');
 			});
 		},
 		startProcess: function(provider) {
