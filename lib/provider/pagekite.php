@@ -21,7 +21,7 @@ use OCP\IL10N;
  */
 class PageKite extends Provider {
 	/** @var string */
-	private $scriptLocation = __DIR__ . '/../../scripts/pagekite/pagekite.py';
+	private $scriptLocation;
 	/** @var string */
 	private $rpcUrl = 'https://pagekite.net/xmlrpc/';
 	/** @var \Zend\XmlRpc\Client\ */
@@ -36,6 +36,8 @@ class PageKite extends Provider {
 								IConfig $config,
 								IClientService $clientService) {
 		parent::__construct($l10n, $config, $clientService);
+
+		$this->scriptLocation = __DIR__ . '/../../scripts/pagekite/pagekite.py';
 
 		// TODO: DI
 		$this->xmlRpcClient = new \Zend\XmlRpc\Client($this->rpcUrl);
