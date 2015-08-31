@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <info>
 	<id>proxy</id>
-	<name>ownCloud Proxy</name>
-	<description>ownCloud Proxy makes it easier to make your ownCloud accessible from the Internet even if it is installed behind a firewall or router. This is done by making the setup of a reverse proxy system very easy.</description>
+	<name>Proxy</name>
+	<description>Proxy makes it easier to make your ownCloud accessible from the Internet even if it is installed behind a firewall or router. This is done by making the setup of a reverse proxy system very easy.</description>
 	<licence>AGPL</licence>
 	<author>Lukas Reschke</author>
 	<version>0.0.1</version>
