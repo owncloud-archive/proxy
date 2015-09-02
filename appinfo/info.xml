@@ -5,7 +5,7 @@
 	<description>Proxy makes it easier to make your ownCloud accessible from the Internet even if it is installed behind a firewall or router. This is done by making the setup of a reverse proxy system very easy.</description>
 	<licence>AGPL</licence>
 	<author>Lukas Reschke</author>
-	<version>0.1.4</version>
+	<version>0.1.5</version>
 	<shipped>true</shipped>
 	<!-- FIXME -->
 	<default_enable/>
