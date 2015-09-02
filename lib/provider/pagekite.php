@@ -23,7 +23,7 @@ class PageKite extends Provider {
 	/** @var string */
 	private $scriptLocation;
 	/** @var string */
-	private $rpcUrl = 'https://pagekite.net/xmlrpc/';
+	private $rpcUrl = 'http://pagekite.net/xmlrpc/';
 	/** @var \Zend\XmlRpc\Client\ */
 	private $xmlRpcClient;
 
@@ -128,8 +128,7 @@ class PageKite extends Provider {
 		$config = "kitename = ".$kitename ."\n";
 		$config .= "kitesecret = ".$kitesecret."\n";
 		$config .= "defaults\n";
-		// TODO: Detect proper port
-		$config .= "service_on  = http:@kitename : localhost:".\OC::$server->getRequest()->server['SERVER_PORT']." : @kitesecret\n";
+		$config .= "service_on  = http:@kitename : localhost:80 : @kitesecret\n";
 		$config .= "END\n";
 		file_put_contents(\OC::$SERVERROOT .'/data/pagekite.cfg', $config);
 	}
@@ -227,7 +226,7 @@ class PageKite extends Provider {
 		$trustedDomains = $this->config->getSystemValue('trusted_domains', []);
 		$trustedDomains[] = $this->getDomain();
 		$this->config->setSystemValue('trusted_domains', $trustedDomains);
-		$relayWorking = $this->isRelayWorking('https://'.$this->getDomain().\OC::$WEBROOT);
+		$relayWorking = $this->isRelayWorking('http://'.$this->getDomain().\OC::$WEBROOT);
 
 		if($relayWorking) {
 			$this->config->setAppValue('relay', 'provider.pagekite.startedPid', $forkedPid);
