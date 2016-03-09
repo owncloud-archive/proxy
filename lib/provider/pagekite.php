@@ -69,7 +69,7 @@ class PageKite extends Provider {
 	 * @return string
 	 */
 	public function getDescription() {
-		return (string)$this->l10n->t('Pagekite is an offering by "The Beanstalks Project". A free trial option offers 1 month of usage including 2.5 GB of transfer data.<br><a href="%s">Read more about the pricing options.</a>', ['https://pagekite.net/signup/?more=bw']);
+		return (string)$this->l10n->t('Pagekite is an offering by "The Beanstalks Project". A free trial option offers 1 month of usage including 2.5 GB of transfer data.<br><a target="_blank" href="%s">Read more about the pricing options.</a>', ['https://pagekite.net/signup/?more=bw']);
 	}
 
 	/**
@@ -99,7 +99,7 @@ class PageKite extends Provider {
 			],
 			'tos' => [
 				'type' => 'checkbox',
-				'description' => $this->l10n->t('Accept the <a href="%s">Terms of Service</a>', ['https://pagekite.net/support/terms/']),
+				'description' => $this->l10n->t('Accept the <a target="_blank" href="%s">Terms of Service</a>', ['https://pagekite.net/support/terms/']),
 			],
 		];
 	}
