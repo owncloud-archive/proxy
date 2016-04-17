@@ -31,6 +31,11 @@ class Helper {
 	public function getRegisteredProviders() {
 		// TODO: DI
 		return [
+			new Provider\Connect(
+				$this->l10n,
+				\OC::$server->getConfig(),
+				\OC::$server->getHTTPClientService()
+			),
 			new PageKite(
 				$this->l10n,
 				\OC::$server->getConfig(),

@@ -7,7 +7,7 @@
 	OCA.Connect.Settings = {
 		stopProcess: function(provider) {
 			// FIXME: Send Provider
-			$.post(OC.generateUrl('/apps/proxy/api/stop'), '', function(response) {
+			$.post(OC.generateUrl('/apps/proxy/api/stop'), {providerClass: provider}, function(response) {
 			}).success(function(response) {
 				location.reload();
 			}).fail(function(response) {
@@ -16,7 +16,7 @@
 		},
 		startProcess: function(provider) {
 			// FIXME: Send Provider
-			$.post(OC.generateUrl('/apps/proxy/api/start'), '', function(response) {
+			$.post(OC.generateUrl('/apps/proxy/api/start'), {providerClass: provider}, function(response) {
 			}).success(function(response) {
 				location.reload();
 			}).fail(function(response) {
@@ -66,10 +66,28 @@
 })(OCA);
 
 $(function() {
-	$("#oca_proxy_tabs").tabs();
+	var chosenProvider;
+
+	// Step 1: Choose a provider
+	$("#oca-proxy-step1 button").click(function(e) {
+		e.preventDefault();
+		chosenProvider = e.target.value;
+
+		// Hide current view
+		$("#oca-proxy-step1").addClass('hidden');
+		$("#oca-proxy-step2-"+chosenProvider).removeClass('hidden');
+
+		// Step 2: Dependency check
+		$("#oca-proxy-step2-"+chosenProvider+" button").click(function(e) {
+			$("#oca-proxy-step2-"+chosenProvider).addClass('hidden');
+			$("#oca-proxy-step3-"+chosenProvider).removeClass('hidden');
+		});
+
+	});
+
 	$(".oca_proxy_stop").click(function(e) {
 		e.preventDefault();
-		OCA.Connect.Settings.stopProcess();
+		OCA.Connect.Settings.stopProcess($("#oca-proxy-active-provider-class").val());
 	});
 	$(".oca_proxy_restart").click(function(e) {
 		$("#oca-connect-check-connection").css('display', 'inline');
@@ -78,7 +96,7 @@ $(function() {
 
 		e.preventDefault();
 		$(this).attr('disabled', 'disabled');
-		OCA.Connect.Settings.startProcess();
+		OCA.Connect.Settings.startProcess($("#oca-proxy-active-provider-class").val());
 	});
 
 	$(".oca_proxy_register").submit(function(e) {

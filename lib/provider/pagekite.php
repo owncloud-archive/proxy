@@ -9,6 +9,8 @@
 namespace OCA\Proxy\Provider;
 
 use GuzzleHttp\Exception\ServerException;
+use OCA\Proxy\Dependencies\Nohup;
+use OCA\Proxy\Dependencies\Python;
 use OCA\Proxy\Provider;
 use OCP\Http\Client\IClientService;
 use OCP\IConfig;
@@ -44,11 +46,16 @@ class PageKite extends Provider {
 		$client = new \Zend\Http\Client();
 		$client->setAdapter('Zend\Http\Client\Adapter\Proxy');
 		$client->setOptions([
-			'sslcafile' => \OC::$SERVERROOT . '/config/ca-bundle.crt',
-			//'proxy_host' => $config->getSystemValue(),
-			//'proxy_port' => 8080,
+			'sslcafile' => \OC::$SERVERROOT . '/resources/config/ca-bundle.crt',
 		]);
 		$this->xmlRpcClient->setHttpClient($client);
+	}
+
+	public function getDependencies() {
+		return [
+			new Nohup(),
+			new Python(),
+		];
 	}
 
 	/**
@@ -229,53 +236,12 @@ class PageKite extends Provider {
 		$relayWorking = $this->isRelayWorking('http://'.$this->getDomain().\OC::$WEBROOT);
 
 		if($relayWorking) {
-			$this->config->setAppValue('relay', 'provider.pagekite.startedPid', $forkedPid);
+			$this->setPid($forkedPid);
 			return true;
 		} else {
 			exec('kill -9 '.$forkedPid);
 			return false;
 		}
-	}
-
-	/**
-	 * Checks if the relay at the specified URL is working
-	 *
-	 * @param string $relayUrl
-	 * @return bool
-	 */
-	public function isRelayWorking($relayUrl) {
-		set_time_limit(60);
-		for ($i = 1; $i <= 10; $i++) {
-			sleep(5);
-			$client = $this->clientService->newClient();
-			try {
-				$client->get($relayUrl);
-			} catch (ServerException $e) {
-				if($e->getResponse()->getStatusCode() === 503) {
-					continue;
-				}
-			}
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * @return string|null
-	 */
-	public function getPid() {
-		$pid = $this->config->getAppValue('relay', 'provider.pagekite.startedPid', null);
-		if($pid !== null) {
-			exec("ps -p $pid", $output);
-
-			// FIXME: Check on Linux
-			if (count($output) > 1) {
-				return $pid;
-			}
-		}
-
-		return null;
 	}
 
 	/**

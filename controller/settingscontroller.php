@@ -51,12 +51,12 @@ class SettingsController extends Controller {
 	}
 
 	/**
-	 * @param $providerClass
+	 * @param string $providerClass
 	 * @return JSONResponse
 	 */
 	public function startProcess($providerClass) {
-		// FIXME: Support different providers
-		$providerClass = new Provider\PageKite(
+		/** @var Provider $providerClass */
+		$providerClass = new $providerClass(
 			\OC::$server->getL10N($this->appName),
 			\OC::$server->getConfig(),
 			\OC::$server->getHTTPClientService()
@@ -71,15 +71,14 @@ class SettingsController extends Controller {
 	 * @return JSONResponse
 	 */
 	public function stopProcess($providerClass) {
-		$providerClass = $this->request->getParam('providerClass');
-
-		// FIXME: Support different providers
-		$providerClass = new Provider\PageKite(
+		/** @var Provider $providerClass */
+		$providerClass = new $providerClass(
 			\OC::$server->getL10N($this->appName),
 			\OC::$server->getConfig(),
 			\OC::$server->getHTTPClientService()
 		);
 
+		$providerClass->stopPersistenceHelper();
 		$state = $providerClass->stopRelay();
 		return new JSONResponse($state);
 	}
@@ -124,7 +123,7 @@ class SettingsController extends Controller {
 		try {
 			$providerClass->createAccount($requestParams);
 		} catch (\Exception $e) {
-			return new JSONResponse($e->getMessage(), Http::STATUS_UNAUTHORIZED);
+			return new JSONResponse($e->getMessage(), Http::STATUS_BAD_REQUEST);
 		}
 
 		return new Http\DataResponse('Registration successful, please check your mail.');
@@ -155,13 +154,13 @@ class SettingsController extends Controller {
 			$providerClass->storeConfig($requestParams);
 			$response = $providerClass->startRelay();
 		} catch (\Exception $e) {
-			return new JSONResponse($e->getMessage(), Http::STATUS_UNAUTHORIZED);
+			return new JSONResponse($e->getMessage(), Http::STATUS_BAD_REQUEST);
 		}
 
 		if($response === true) {
 			return new JSONResponse(['state' => $response, 'domain' => 'https://'.$providerClass->getDomain()], Http::STATUS_OK);
 		} else {
-			return new JSONResponse($response, Http::STATUS_UNAUTHORIZED);
+			return new JSONResponse($response, Http::STATUS_BAD_REQUEST);
 		}
 	}
 
@@ -170,29 +169,30 @@ class SettingsController extends Controller {
 	 */
 	public function getState() {
 		$providers = $this->helper->getRegisteredProviders();
-		$domain = '';
+		$domains = [];
 		foreach($providers as $provider) {
-			$domain = $provider->getDomain();
+			$domains[] = $provider->getDomain();
 		}
 
 		$requestUrl = 'https://ec2-52-24-200-183.us-west-2.compute.amazonaws.com/state.php';
-		if($domain !== '') {
+		foreach($domains as $domain) {
 			$requestUrl .= '?remote='.$domain.\OC::$WEBROOT.'/';
+
+			// TODO: Use DI
+			$client = \OC::$server->getHTTPClientService()->newClient();
+			$response = $client->get(
+				$requestUrl,
+				[
+					'verify' => __DIR__ . '/../appinfo/ec2.crt',
+				]
+			)->getBody();
+
+			if($response !== 'false') {
+				return new Http\DataResponse(substr($response, 0, -11));
+			}
 		}
 
-		$client = \OC::$server->getHTTPClientService()->newClient();
-		$response = $client->get(
-			$requestUrl,
-			[
-				'verify' => __DIR__ . '/../appinfo/ec2.crt',
-			]
-		)->getBody();
-
-		if($response === 'false') {
-			return new Http\DataResponse([], Http::STATUS_FORBIDDEN);
-		} else {
-			return new Http\DataResponse($response);
-		}
+		return new Http\DataResponse([], Http::STATUS_NOT_FOUND);
 	}
 
 	/**
@@ -200,12 +200,19 @@ class SettingsController extends Controller {
 	 */
 	public function displayPanel() {
 		$providers = $this->helper->getRegisteredProviders();
+		$registeredProvider = '';
+		foreach($providers as $provider) {
+			if($provider->isRegistered()) {
+				$registeredProvider = $provider;
+			}
+		}
 
 		return new TemplateResponse(
 			$this->appName,
 			'settings',
 			[
 				'providers' => $providers,
+				'registeredProvider' => $registeredProvider,
 			],
 			''
 		);

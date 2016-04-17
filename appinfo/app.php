@@ -21,11 +21,15 @@
 
 namespace OCA\Proxy\AppInfo;
 
+use OCA\Proxy\Jobs\ForkToCron;
 use OCP\App;
 
 if ((@include_once __DIR__ . '/../vendor/autoload.php')===false) {
 	throw new \Exception('Cannot include relay autoloader.');
 }
+
+// Register job that forks the connection to cron
+\OC::$server->getJobList()->add(new ForkToCron());
 
 $app = new Application();
 $c = $app->getContainer();
