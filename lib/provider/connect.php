@@ -92,10 +92,6 @@ class Connect extends Provider {
 				'type' => 'checkbox',
 				'description' => $this->l10n->t('Subscribe to ownCloud newsletter (optional)'),
 			],
-			'tos' => [
-				'type' => 'checkbox',
-				'description' => $this->l10n->t('Accept the <a target="_blank" href="%s">Terms of Service</a>', ['https://pagekite.net/support/terms/']),
-			],
 		];
 	}
 
