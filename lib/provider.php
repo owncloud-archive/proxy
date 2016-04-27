@@ -197,7 +197,7 @@ abstract class Provider {
 	 * @return string
 	 */
 	private function getInfoByPid($pid) {
-		return exec(sprintf('ps -p %s', $pid));
+		return exec(sprintf('ps %s', $pid));
 	}
 
 	/**
