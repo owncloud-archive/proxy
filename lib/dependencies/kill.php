@@ -16,7 +16,7 @@ class Kill extends Dependency {
 	}
 
 	public function isAvailable() {
-		$return = shell_exec('command -v Kill');
+		$return = shell_exec('command -v kill');
 		return !empty($return);
 	}
 }
