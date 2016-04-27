@@ -135,7 +135,7 @@ style('proxy', 'style');
 						<strong><?php p($l->t('Connector PID:')) ?></strong> <?php p($registeredProvider->getPid()) ?><br/>
 						<strong><?php p($l->t('Connector PID info:')) ?></strong><br/>
 						<code><?php p($registeredProvider->getPidInfo()) ?></code><br/>
-						<strong><?php p($l->t('Persistence PID:'))?></strong><?php p($registeredProvider->getPersistencePid()) ?><br/>
+						<strong><?php p($l->t('Persistence PID:'))?></strong> <?php p($registeredProvider->getPersistencePid()) ?><br/>
 						<strong><?php p($l->t('Persistence PID info:')) ?></strong><br/>
 						<code><?php p($registeredProvider->getPersistenceInfo()) ?></code><br/>
 				</div>
