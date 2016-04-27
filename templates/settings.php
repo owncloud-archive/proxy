@@ -106,6 +106,7 @@ style('proxy', 'style');
 						<input type="hidden" name="provider" value="<?php p(get_class($provider)) ?>">
 						<?php print_unescaped($provider->buildRegisterHtml()) ?>
 						<input class="oca_proxy_register_submit" type="submit" value="Register">
+						<img class="oca_proxy_register_spinner hidden" src="<?php p(image_path('core', 'loading.gif')); ?>"/>
 					</form>
 					<div class="oca_proxy_registration_successful hidden">
 						<?php p($l->t('You have been successfully registered. Please check your email for your user credentials.')) ?>

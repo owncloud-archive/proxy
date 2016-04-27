@@ -54,10 +54,16 @@
 			$('.oca_proxy_registration_successful').removeClass('hidden');
 		},
 		tryRegister: function(data) {
+			$('.oca_proxy_register input').attr('disabled', 'disabled');
+			$('.oca_proxy_register_spinner').removeClass('hidden');
+			$('.oca_proxy_register_submit').addClass('hidden');
 			$.post(OC.generateUrl('/apps/proxy/api/register'), data, function(response) {
 			}).success(function(response) {
 				OCA.Connect.Register.hideForm();
 			}).fail(function(response) {
+				$('.oca_proxy_register_spinner').addClass('hidden');
+				$('.oca_proxy_register_submit').removeClass('hidden');
+				$('.oca_proxy_register input').prop('disabled', false);
 				OC.Notification.showTemporary(response.responseJSON);
 			});
 		}
